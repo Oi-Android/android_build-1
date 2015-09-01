@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (C) 2012-2015, The MoKee OpenSource Project
+# Copyright (C) 2012-2015, The Oi-Android OpenSource Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ except:
     device = product
 
 if not depsonly:
-    print("Device %s not found. Attempting to retrieve device repository from MoKee OpenSource Github (https://github.com/MoKee)." % device)
+    print("Device %s not found. Attempting to retrieve device repository from Oi-Android OpenSource Github (https://github.com/Oi-Android)." % device)
 
 repositories = []
 
@@ -70,7 +70,7 @@ def add_auth(githubreq):
         githubreq.add_header("Authorization","Basic %s" % githubauth)
 
 if not depsonly:
-    githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:MoKee+in:name+fork:true" % device)
+    githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:Oi-Android+in:name+fork:true" % device)
     add_auth(githubreq)
     try:
         result = json.loads(urllib.request.urlopen(githubreq).read().decode())
@@ -173,12 +173,12 @@ def add_to_manifest(repositories, fallback_branch = None):
         repo_name = repository['repository']
         repo_target = repository['target_path']
         if exists_in_tree(lm, repo_name):
-            print('MoKee/%s already exists' % (repo_name))
+            print('Oi-Android/%s already exists' % (repo_name))
             continue
 
-        print('Adding dependency: MoKee/%s -> %s' % (repo_name, repo_target))
+        print('Adding dependency: Oi-Android/%s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "mokee", "name": "MoKee/%s" % repo_name })
+            "remote": "Oi-Android", "name": "Oi-Android/%s" % repo_name })
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -209,7 +209,7 @@ def fetch_dependencies(repo_path, fallback_branch = None):
         fetch_list = []
 
         for dependency in dependencies:
-            if not is_in_manifest("MoKee/%s" % dependency['repository']):
+            if not is_in_manifest("Oi-Android/%s" % dependency['repository']):
                 fetch_list.append(dependency)
                 syncable_repos.append(dependency['target_path'])
 
@@ -292,4 +292,4 @@ else:
             print("Done")
             sys.exit()
 
-print("Repository for %s not found in the MoKee OpenSource Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
+print("Repository for %s not found in the Oi-Android OpenSource Github repository list. If this is in error, you may need to manually add it to your local_manifests/roomservice.xml." % device)
